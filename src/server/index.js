@@ -1,13 +1,17 @@
 const next = require('next');
 const Hapi = require('hapi');
 const Good = require('good');
+const { graphqlHapi, graphiqlHapi } = require('apollo-server-hapi');
+
+const schema = require('./graphql/schema');
 const { pathWrapper, defaultHandlerWrapper, nextHandlerWrapper } = require('./next-wrapper');
 
-const port = parseInt(process.env.PORT, 10) || 4000;
+const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dir: './src', dev });
-const server = new Hapi.Server({
-    port
+const server = Hapi.server({
+    host: 'localhost',
+    port: process.env.PORT || 4000
 });
 /*
 const pluginOptions = [
@@ -48,12 +52,35 @@ app
     });
 
     try {
+        await server.register({
+            plugin: graphqlHapi,
+            options: {
+                path: '/graphql',
+                graphqlOptions: {
+                    schema,
+                },
+                route: {
+                    cors: true,
+                },
+            },
+        });
+
+        await server.register({
+            plugin: graphiqlHapi,
+            options: {
+                path: '/graphiql',
+                graphiqlOptions: {
+                    endpointURL: '/graphql'
+                },
+            },
+        });
         // await server.register(pluginOptions); Good is not ready for Hapi 17 yet.
         await server.start();
 
-        console.log(`> Ready on http://localhost:${port}`);
+        console.log('Server running at:', server.info.uri);
     } catch (error) {
         console.log('Error starting server');
         console.log(error);
+        process.exit(1);
     }
 });

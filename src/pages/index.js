@@ -1,15 +1,33 @@
-import withRedux from 'next-redux-wrapper'
-import withData from '../apollo-client';
+import React from 'react';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+// import withRedux from 'next-redux-wrapper'
+import withData from '../with-data';
+// import { initStore } from '../redux/configure-store';
 import Layout from '../components/layout';
-import { initStore } from '../redux/configure-store';
 
-export default withData(props => (
-    <Layout>
-        <div>
-            <h1>Here you are</h1>
-        </div>
-    </Layout>
-));
+const App = () => {
+    return (
+        <Layout>
+            <div>
+                <h1>Here you are</h1>
+            </div>
+        </Layout>
+    );
+};
+
+const allReviews = gql`
+  query allReviews {
+    allReviews(orderBy: createdAt_DESC) {
+      id
+      slug
+      rating
+      createdAt
+      title
+    }
+  }`
+
+export default withData(graphql(allReviews)(App));
 /*
 const Index = props => (
     <Layout>
