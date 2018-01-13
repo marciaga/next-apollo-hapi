@@ -18,9 +18,13 @@ type Mutation {
 }
 
 `;
+const logger = { log: e => console.log('Logger: ', e) };
 
+const schema = makeExecutableSchema({
+    typeDefs,
+    resolvers,
+    logger,
+    allowUndefinedInResolve: false,
+ });
 
-
-const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-export { schema };
+export { schema }

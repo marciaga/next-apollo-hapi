@@ -3,10 +3,9 @@ const Hapi = require('hapi');
 const Good = require('good');
 const { graphqlHapi, graphiqlHapi } = require('apollo-server-hapi');
 
-const schema = require('./graphql/schema');
+const { schema } = require('./graphql/schema');
 const { pathWrapper, defaultHandlerWrapper, nextHandlerWrapper } = require('./next-wrapper');
 
-const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dir: './src', dev });
 const server = Hapi.server({
@@ -36,7 +35,7 @@ app
     server.route({
         method: 'GET',
         path: '/health',
-        handler: (request, reply) => reply({ status: 'OK' })
+        handler: (request, h) => ({ status: 'OK' })
     });
 
     server.route({
@@ -60,7 +59,7 @@ app
                     schema,
                 },
                 route: {
-                    cors: true,
+                    cors: false,
                 },
             },
         });
