@@ -13,6 +13,7 @@
     "graphql-tag": "^2.6.1",
     "graphql-tools": "^2.16.0",
     "hapi": "^17.2.0",
+    "hapi-redis2": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
     "next": "^4.2.1",
     "next-apollo": "^1.0.10",
@@ -40,6 +41,9 @@
     "nodemon": "^1.14.8"
   },
   "nodemonConfig": {
-    "ignore": ["./src/.next", "./src/page"]
+    "ignore": [
+      "./src/.next",
+      "./src/page"
+    ]
   }
 }

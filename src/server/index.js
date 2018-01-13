@@ -1,6 +1,7 @@
 const next = require('next');
 const Hapi = require('hapi');
-const Good = require('good');
+const hapiRedis = require('hapi-redis2');
+// const Good = require('good');
 const { graphqlHapi, graphiqlHapi } = require('apollo-server-hapi');
 
 const { schema } = require('./graphql/schema');
@@ -55,9 +56,12 @@ app
             plugin: graphqlHapi,
             options: {
                 path: '/graphql',
-                graphqlOptions: {
+                graphqlOptions: request => ({
                     schema,
-                },
+                    context: {
+                        redisClient: request.server.plugins['hapi-redis2'].client
+                    }
+                }),
                 route: {
                     cors: false,
                 },
@@ -73,6 +77,18 @@ app
                 },
             },
         });
+
+        await server.register({
+            plugin: hapiRedis,
+            options: {
+                settings: {
+                    host: 'localhost',
+                    port: 6379,
+                    db: 1
+
+                }
+            }
+        })
         // await server.register(pluginOptions); Good is not ready for Hapi 17 yet.
         await server.start();
 
