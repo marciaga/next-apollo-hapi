@@ -13,21 +13,34 @@ let nextId = 3; // garbage
 
 export const resolvers = {
     Query: {
-        channels: (root, args, context) => {
+        channels: async (root, args, context) => {
+            try {
+                const { redisClient } = context;
+                const result = await redisClient.get('beer');
+                console.log(result)
             // console.log(context.redisClient)
-            return channels;
+                return channels;
+            } catch (e) {
+                console.log(e);
+            }
         },
     },
     Mutation: {
-        addChannel: (root, args, context) => {
-            const newChannel = {
-                id: nextId++,
-                name: args.name
-            };
+        addChannel: async (root, args, context) => {
+            try {
+                const { redisClient } = context;
+                const newChannel = {
+                    id: nextId++,
+                    name: args.name
+                };
 
-            channels.push(newChannel); // the things we do for mocking...
+                await redisClient.set('beer', JSON.stringify(newChannel));
+                channels.push(newChannel); // the things we do for mocking...
 
-            return newChannel;
+                return newChannel;
+            } catch (e) {
+                console.log(e);
+            }
         },
     },
 };

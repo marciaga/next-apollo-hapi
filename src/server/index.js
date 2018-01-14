@@ -11,7 +11,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dir: './src', dev });
 const server = Hapi.server({
     host: 'localhost',
-    port: process.env.PORT || 4000
+    port: process.env.PORT || 3000
 });
 /*
 const pluginOptions = [

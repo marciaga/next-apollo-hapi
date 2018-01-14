@@ -2,9 +2,8 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import withData from '../with-data';
+import AddChannel from '../components/add-channel';
 import Layout from '../components/layout';
-// import withRedux from 'next-redux-wrapper'
-// import { initStore } from '../redux/configure-store';
 
 const Channels = ({ data: {loading, error, channels }}) => {
     if (loading) {
@@ -25,12 +24,13 @@ const Channels = ({ data: {loading, error, channels }}) => {
 const App = (props) => {
     return (
         <Layout>
+            <AddChannel />
             <Channels {...props}/>
         </Layout>
     );
 };
 
-const ChannelsList = gql`
+export const channelsListQuery = gql`
     query ChannelsListQuery {
         channels {
             id
@@ -38,34 +38,4 @@ const ChannelsList = gql`
         }
 }`
 
-export default withData(graphql(ChannelsList)(App));
-/*
-const Index = props => (
-<Layout>
-<div>
-<h1>Here you are</h1>
-</div>
-</Layout>
-);
-*/
-
-/*
-const mapDispatchToProps = dispatch => ({
-dispatch
-});
-
-Index.getInitialProps = ({ store, isServer }) => {
-const { dispatch } = store;
-
-return {
-dispatch,
-isServer
-};
-};
-
-export default withRedux(
-initStore,
-state => ({}),
-mapDispatchToProps
-)(Index);
-*/
+export default withData(graphql(channelsListQuery)(App));
