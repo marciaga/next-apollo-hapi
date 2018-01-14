@@ -16,9 +16,9 @@ export const resolvers = {
         channels: async (root, args, context) => {
             try {
                 const { redisClient } = context;
-                const result = await redisClient.get('beer');
-                console.log(result)
-            // console.log(context.redisClient)
+                // const result = await redisClient.get('beer');
+                // console.log(result)
+
                 return channels;
             } catch (e) {
                 console.log(e);
@@ -34,7 +34,7 @@ export const resolvers = {
                     name: args.name
                 };
 
-                await redisClient.set('beer', JSON.stringify(newChannel));
+                // await redisClient.set('beer', JSON.stringify(newChannel));
                 channels.push(newChannel); // the things we do for mocking...
 
                 return newChannel;
