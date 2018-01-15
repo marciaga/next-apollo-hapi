@@ -33,7 +33,7 @@ const AddChannel = ({ mutate }) => {
             type="text"
             placeholder="New channel"
             onKeyUp={handleKeyUp}
-            />
+        />
     );
 };
 
@@ -46,8 +46,6 @@ const addChannelMutation = gql`
   }
 `;
 
-const AddChannelWithMutation = graphql(
+export const AddChannelWithMutation = graphql(
   addChannelMutation
 )(AddChannel);
-
-export default AddChannelWithMutation;

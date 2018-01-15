@@ -26,7 +26,8 @@
   "scripts": {
     "dev": "nodemon -w ./src/server -w ./src/components --exec babel-node ./src/server/index.js",
     "build": "next build",
-    "start": "NODE_ENV=production node src/server/index.js"
+    "start": "NODE_ENV=production node src/server/index.js",
+    "seed": "node bin/seed.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

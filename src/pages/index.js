@@ -2,10 +2,10 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import withData from '../with-data';
-import AddChannel from '../components/add-channel';
+import { MainForm } from '../components/main-form';
 import Layout from '../components/layout';
 
-const Channels = ({ data: {loading, error, channels }}) => {
+const Channels = ({ data: {loading, error, beers }}) => {
     if (loading) {
         return <p>Loading ...</p>;
     }
@@ -16,7 +16,7 @@ const Channels = ({ data: {loading, error, channels }}) => {
 
     return (
         <ul>
-            {channels.map( ch => <li key={ch.id}>{ch.name}</li> )}
+            {beers.map( beer => <li key={beer.id}>{beer.name}</li> )}
         </ul>
     );
 };
@@ -24,18 +24,21 @@ const Channels = ({ data: {loading, error, channels }}) => {
 const App = (props) => {
     return (
         <Layout>
-            <AddChannel />
-            <Channels {...props}/>
+            <MainForm {...props} />
         </Layout>
     );
 };
 
-export const channelsListQuery = gql`
-    query ChannelsListQuery {
-        channels {
+export const beersListQuery = gql`
+    query BeersListQuery {
+        beers {
             id
             name
+            style
+            brewery
+            abv
+            tapped
         }
 }`
 
-export default withData(graphql(channelsListQuery)(App));
+export default withData(graphql(beersListQuery)(App));

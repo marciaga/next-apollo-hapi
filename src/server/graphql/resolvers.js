@@ -1,46 +1,86 @@
-// const client = request.redis.client;
-// await client.set('hello', request.params.val);
-
-const channels = [{
-    id: 1,
-    name: 'soccer',
-}, {
-    id: 2,
-    name: 'baseball',
-}];
-
-let nextId = 3; // garbage
-
 export const resolvers = {
     Query: {
-        channels: async (root, args, context) => {
+        beers: async (root, args, context) => {
             try {
                 const { redisClient } = context;
-                // const result = await redisClient.get('beer');
-                // console.log(result)
 
-                return channels;
+                const result = await redisClient.get('beers');
+
+                if (!result) {
+                    return [];
+                }
+
+                return JSON.parse(result);
             } catch (e) {
                 console.log(e);
             }
         },
     },
     Mutation: {
-        addChannel: async (root, args, context) => {
+        createBeer: async (root, args, context) => {
             try {
                 const { redisClient } = context;
-                const newChannel = {
-                    id: nextId++,
-                    name: args.name
-                };
+                const { name, style, brewery, abv, tapped } = args;
+                // get all the beers
 
                 // await redisClient.set('beer', JSON.stringify(newChannel));
-                channels.push(newChannel); // the things we do for mocking...
-
-                return newChannel;
+                // channels.push(newChannel); // the things we do for mocking...
+                //
+                // return newChannel;
             } catch (e) {
                 console.log(e);
             }
         },
+        updateBeer: async (root, args, context) => {
+            try {
+                const { redisClient } = context;
+                const { id, name, style, brewery, abv, tapped } = args.input;
+                // get all the beers
+                const result = await redisClient.get('beers');
+
+                if (!result) {
+                    // there's no beers, so add it
+                    await redisClient.set('beers', JSON.stringify([
+                        {
+                            id,
+                            name,
+                            style,
+                            brewery,
+                            abv,
+                            tapped
+                        }
+                    ]));
+
+                    return args.input; // maybe don't do this
+                }
+                // otherwise, find beer in result
+                const r = JSON.parse(result);
+                console.log('result', r);
+
+                const newResult = r.map((f, i) => {
+                    const d = {
+                        id,
+                        name,
+                        style,
+                        brewery,
+                        abv,
+                        tapped
+                    };
+
+
+                    if (f.id === id) {
+                        return d;
+                    }
+
+                    return f;
+                });
+
+                await redisClient.set('beers', JSON.stringify(newResult));
+
+                return args.input; // maybe don't do this
+            } catch (e) {
+                console.log(e);
+            }
+        }
     },
 };

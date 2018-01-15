@@ -12,3 +12,7 @@ const config: {
     db: 1 // must be a number
 };
 ```
+## Seed the Redis DB:
+```
+$ yarn seed
+```
