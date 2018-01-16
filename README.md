@@ -4,9 +4,9 @@
 ```
 $ docker run --name next-apollo-hapi -d -p 6379:6379 redis
 ```
-## Configure Redis options:
+## Configure Redis options in src/server/index.js in the HapiRedis registration:
 ```
-const config: {
+const config = {
     host: 'localhost',
     port: 6379,
     db: 1 // must be a number
