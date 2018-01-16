@@ -21,14 +21,12 @@ type Beer {
     abv: String
     tapped: String
 }
-# This type specifies the entry points into our API. In this case
-# there is only one - "beers" - which returns a list of beers.
+
 type Query {
    beers: [Beer]    # "[]" means this is a list of beeers
 }
 # The mutation root type, used to define all mutations
 type Mutation {
-    createBeer(input: BeerInput): Beer
     updateBeer(input: BeerInput): Beer
 }
 

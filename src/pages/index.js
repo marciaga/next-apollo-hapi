@@ -5,23 +5,8 @@ import withData from '../with-data';
 import { MainForm } from '../components/main-form';
 import Layout from '../components/layout';
 
-const Channels = ({ data: {loading, error, beers }}) => {
-    if (loading) {
-        return <p>Loading ...</p>;
-    }
-
-    if (error) {
-        return <p>{error.message}</p>;
-    }
-
-    return (
-        <ul>
-            {beers.map( beer => <li key={beer.id}>{beer.name}</li> )}
-        </ul>
-    );
-};
-
 const App = (props) => {
+    // props contains error and loading keys
     return (
         <Layout>
             <MainForm {...props} />
